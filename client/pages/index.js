@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "@/styles/Home.module.css";
+import BarChart from "../components/BarChart";
 
 export default function Home() {
   return (
@@ -11,7 +12,93 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="text-4xl font-bold underline">hi</div>
+      <div className="flex h-screen bg-gray-900 text-white">
+        <aside className="w-64 bg-black p-5 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <img src="https://png.pngtree.com/png-vector/20190710/ourlarge/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="User" className="w-12 h-12 rounded-full" />
+              <span className="text-lg font-semibold">Ayush Dangwal</span>
+            </div>
+            <nav className="space-y-3">
+              <a href="#" className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
+                🏠 Home
+              </a>
+              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+                💰 Expenses
+              </a>
+              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+                ✈️ Trips
+              </a>
+              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+                ✅ Approvals
+              </a>
+              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+                ⚙️ Settings
+              </a>
+              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+                📞 Support
+              </a>
+            </nav>
+          </div>
+          <div>
+            <div className="flex items-center justify-center space-x-4">
+              <img src="favicon.png" alt="" className="w-8 h-8" />
+              <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xl font-bold">FinVisual</div>
+            </div>
+          </div>
+        </aside>
+
+        <main className="flex-1 p-6">
+          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+
+          <div className="grid grid-cols-3 gap-6">
+            <div className="bg-gray-800 p-4 rounded-lg">
+              <h2 className="text-lg font-semibold mb-2">Pending Tasks</h2>
+              <ul className="space-y-1">
+                <li className="flex justify-between">
+                  <span>Pending Approvals</span> <span>5</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>New Trips Registered</span> <span>1</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Unreported Expenses</span> <span>4</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-800 p-4 rounded-lg col-span-2">
+              <h2 className="text-lg font-semibold mb-2">Recent Expenses</h2>
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="p-2">Subject</th>
+                    <th className="p-2">Employee</th>
+                    <th className="p-2">Team</th>
+                    <th className="p-2">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="p-2">Office Supplies</td>
+                    <td className="p-2">John Smith</td>
+                    <td className="p-2"><span className="bg-purple-600 px-2 py-1 rounded">Marketing</span></td>
+                    <td className="p-2">€150.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-6 bg-gray-800 p-6 rounded-lg">
+            <h2 className="text-lg font-semibold mb-4">Monthly Report</h2>
+            <div className="flex gap-4">
+              <div className="flex-1 bg-gray-900 p-4 rounded-lg"><BarChart /></div>
+              <div className="flex-1 bg-gray-900 p-4 rounded-lg"><BarChart /></div>
+            </div>
+          </div>
+        </main>
+      </div>
     </>
   );
 }
