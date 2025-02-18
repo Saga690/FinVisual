@@ -19,8 +19,6 @@ export default function FinanceChart() {
           }
           acc[month].amount += transaction.amount; 
 
-          console.log(acc)
-
           return acc;
         }, {});
 

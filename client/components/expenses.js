@@ -13,7 +13,7 @@ export default function Expenses() {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
-    const [editingExpense, setEditingExpense] = useState(null); 
+    const [editingExpense, setEditingExpense] = useState(null);
 
     useEffect(() => {
         fetchExpenses();
@@ -56,8 +56,8 @@ export default function Expenses() {
     const handleEdit = (id) => {
         const expenseToEdit = expensesData.find((expense) => expense._id === id);
         setEditingExpense(expenseToEdit);
-        setAmount(expenseToEdit.amount.replace("$", "")); 
-        setCategory(expenseToEdit.report); 
+        setAmount(expenseToEdit.amount.replace("$", ""));
+        setCategory(expenseToEdit.report);
         setDescription(expenseToEdit.title);
         setIsModalOpen(true);
     };
@@ -88,14 +88,14 @@ export default function Expenses() {
 
         try {
             if (editingExpense) {
-                await editTransaction(editingExpense._id, newExpense); 
+                await editTransaction(editingExpense._id, newExpense);
                 alert("Expense updated successfully!");
             } else {
-                await addTransaction(newExpense); 
+                await addTransaction(newExpense);
                 alert("Expense added successfully!");
             }
             setIsModalOpen(false);
-            fetchExpenses(); 
+            fetchExpenses();
         } catch (error) {
             console.error("Error saving transaction:", error);
             alert("Failed to save the expense.");
@@ -106,7 +106,7 @@ export default function Expenses() {
 
     return (
         <div className="p-6 text-white">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
                 <h1 className="text-3xl font-bold">Expenses</h1>
                 <div className="flex space-x-2">
                     <Button onClick={() => setIsModalOpen(true)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
@@ -171,7 +171,7 @@ export default function Expenses() {
                 </DialogContent>
             </Dialog>
 
-            <div className="bg-black rounded-lg p-4 shadow-md">
+            <div className="bg-black rounded-lg p-4 shadow-md overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="border-b border-gray-700">
@@ -193,29 +193,13 @@ export default function Expenses() {
                                             <p className="font-medium">{expense.title}</p>
                                         </div>
                                     </td>
-                                    <td className="py-3 px-4">
-                                        <div className="flex gap-4">
-                                            <button
-                                                onClick={() => handleEdit(expense._id)}
-                                                className="w-6 h-6 cursor-pointer hover:scale-105 transition-transform bg-transparent p-1 rounded-md"
-                                            >
-                                                <img
-                                                    src="https://cdn-icons-png.flaticon.com/128/10336/10336582.png"
-                                                    alt="Edit"
-                                                    className="w-full h-full"
-                                                />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(expense._id)}
-                                                className="w-6 h-6 cursor-pointer hover:scale-105 transition-transform bg-transparent p-1 rounded-md"
-                                            >
-                                                <img
-                                                    src="https://cdn-icons-png.flaticon.com/128/6861/6861362.png"
-                                                    alt="Delete"
-                                                    className="w-full h-full"
-                                                />
-                                            </button>
-                                        </div>
+                                    <td className="py-3 px-4 gap-4">
+                                        <button onClick={() => handleEdit(expense._id)} className="hover:scale-105 transition-transform">
+                                            ✏️
+                                        </button>
+                                        <button onClick={() => handleDelete(expense._id)} className="hover:scale-105 transition-transform">
+                                            ❌
+                                        </button>
                                     </td>
                                     <td className="py-3 px-4">{expense.amount}</td>
                                     <td className="py-3 px-4">{expense.report}</td>
@@ -237,5 +221,6 @@ export default function Expenses() {
                 </table>
             </div>
         </div>
+
     );
 }

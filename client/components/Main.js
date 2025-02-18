@@ -20,10 +20,11 @@ const Main = () => {
     const totalExpenses = transactions.reduce((total, transaction) => total + transaction.amount, 0).toFixed(2);
 
     return (
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-4 sm:p-6">
             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-            <div className="grid grid-cols-3 gap-6">
+            {/* Responsive Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-gradient-to-r from-purple-800 to-cyan-700 p-6 rounded-lg shadow-lg flex items-center justify-center col-span-1">
                     <div className="text-center">
                         <h2 className="text-xl font-semibold text-white mb-4">Total Expenses</h2>
@@ -33,9 +34,9 @@ const Main = () => {
                     </div>
                 </div>
 
-                <div className="bg-gray-800 p-4 rounded-lg col-span-2">
+                <div className="bg-gray-800 p-4 rounded-lg col-span-1 md:col-span-2 overflow-x-auto">
                     <h2 className="text-lg font-semibold mb-2">Recent Expenses</h2>
-                    <table className="w-full text-left">
+                    <table className="w-full text-left min-w-[600px]">
                         <thead>
                             <tr className="border-b border-gray-700">
                                 <th className="p-2">Description</th>
@@ -62,14 +63,17 @@ const Main = () => {
                 </div>
             </div>
 
+            {/* Monthly Report Section */}
             <div className="mt-6 bg-gray-800 p-6 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Monthly Report</h2>
-                <div className="flex gap-4 w-full">
-                    <div className="bg-gray-900 p-6 rounded-lg w-full"><BarChart /></div>
+                <div className="flex flex-col sm:flex-row gap-4 w-full">
+                    <div className="bg-gray-900 p-6 rounded-lg w-full">
+                        <BarChart />
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Main
+export default Main;

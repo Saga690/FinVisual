@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "@/styles/Home.module.css";
+import { Menu, X } from "lucide-react";
 import Main from "@/components/Main";
 import Expenses from "@/components/expenses";
 import Trips from "@/components/Trips";
@@ -10,9 +10,11 @@ import Support from "@/components/Support";
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState("home");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleNavigation = (page) => {
     setSelectedPage(page);
+    setIsSidebarOpen(false); // Close sidebar on mobile when navigating
   };
 
   return (
@@ -23,8 +25,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
+
       <div className="flex h-screen bg-gray-900 text-white">
-        <aside className="w-64 bg-black p-5 flex flex-col justify-between">
+        {/* Mobile Sidebar Toggle */}
+        <button
+          className="absolute top-4 left-4 z-50 md:hidden p-2 bg-gray-800 rounded-md"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Sidebar */}
+        <aside
+          className={`fixed inset-y-0 left-0 bg-black p-5 flex flex-col justify-between transform transition-transform duration-300 w-64 md:relative md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:flex`}
+        >
           <div>
             <div className="flex items-center gap-3 mb-6">
               <img
@@ -34,83 +49,38 @@ export default function Home() {
               />
               <span className="text-lg font-semibold">Ayush Dangwal</span>
             </div>
+
             <nav className="space-y-3">
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "home" ? "bg-gray-800" : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("home")}
-              >
-                🏠 Home
-              </a>
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "expenses"
-                    ? "bg-gray-800"
-                    : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("expenses")}
-              >
-                💰 Expenses
-              </a>
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "trips" ? "bg-gray-800" : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("trips")}
-              >
-                ✈️ Trips
-              </a>
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "approvals"
-                    ? "bg-gray-800"
-                    : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("approvals")}
-              >
-                ✅ Approvals
-              </a>
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "settings"
-                    ? "bg-gray-800"
-                    : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("settings")}
-              >
-                ⚙️ Settings
-              </a>
-              <a
-                href="#"
-                className={`flex items-center gap-3 p-3 rounded-lg ${
-                  selectedPage === "support"
-                    ? "bg-gray-800"
-                    : "hover:bg-gray-800"
-                }`}
-                onClick={() => handleNavigation("support")}
-              >
-                📞 Support
-              </a>
+              {[
+                { name: "🏠 Home", key: "home" },
+                { name: "💰 Expenses", key: "expenses" },
+                { name: "✈️ Trips", key: "trips" },
+                { name: "✅ Approvals", key: "approvals" },
+                { name: "⚙️ Settings", key: "settings" },
+                { name: "📞 Support", key: "support" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  className={`flex w-full items-center gap-3 p-3 rounded-lg transition ${selectedPage === item.key ? "bg-gray-800" : "hover:bg-gray-800"
+                    }`}
+                  onClick={() => handleNavigation(item.key)}
+                >
+                  {item.name}
+                </button>
+              ))}
             </nav>
           </div>
-          <div>
-            <div className="flex items-center justify-center space-x-4">
-              <img src="favicon.png" alt="" className="w-8 h-8" />
-              <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xl font-bold">
-                FinVisual
-              </div>
+
+          <div className="flex items-center justify-center space-x-4">
+            <img src="favicon.png" alt="" className="w-8 h-8" />
+            <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xl font-bold">
+              FinVisual
             </div>
           </div>
         </aside>
 
+        {/* Content Section */}
         <div className="flex-1 p-5 overflow-y-auto">
-          {/* This will allow the content area to scroll if the content overflows */}
           {selectedPage === "home" && <Main />}
           {selectedPage === "expenses" && <Expenses />}
           {selectedPage === "trips" && <Trips />}
