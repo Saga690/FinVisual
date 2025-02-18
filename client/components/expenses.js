@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addTransaction, getTransactions } from "@/lib/api";
+import { addTransaction, getTransactions, deleteTransaction } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -36,6 +36,7 @@ export default function Expenses() {
                 }
 
                 return {
+                    _id: tx._id,
                     date: new Date(tx.date).toLocaleDateString(),
                     title: tx.description,
                     merchant: "Unknown",
@@ -49,6 +50,22 @@ export default function Expenses() {
             setExpensesData(formattedData);
         } catch (error) {
             console.error("Error fetching transactions:", error);
+        }
+    };
+
+    const handleEdit = (id) => {
+        console.log("Editing expense with ID:", id);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            console.log(id);
+            await deleteTransaction(id);
+            fetchExpenses();
+            alert("Expense deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            alert("Failed to delete the expense.");
         }
     };
 
@@ -147,7 +164,7 @@ export default function Expenses() {
                     <thead>
                         <tr className="border-b border-gray-700">
                             <th className="py-3 px-4 text-gray-400">DETAILS</th>
-                            <th className="py-3 px-4 text-gray-400">MERCHANT</th>
+                            <th className="py-3 px-4 text-gray-400">ACTIONS</th>
                             <th className="py-3 px-4 text-gray-400">AMOUNT</th>
                             <th className="py-3 px-4 text-gray-400">CATEGORY</th>
                             <th className="py-3 px-4 text-gray-400">STATUS</th>
@@ -164,7 +181,30 @@ export default function Expenses() {
                                             <p className="font-medium">{expense.title}</p>
                                         </div>
                                     </td>
-                                    <td className="py-3 px-4">{expense.merchant}</td>
+                                    <td className="py-3 px-4">
+                                        <div className="flex gap-4">
+                                            <button
+                                                onClick={() => handleEdit(expense._id)}
+                                                className="w-6 h-6 cursor-pointer hover:scale-105 transition-transform bg-transparent p-1 rounded-md"
+                                            >
+                                                <img
+                                                    src="https://cdn-icons-png.flaticon.com/128/10336/10336582.png"
+                                                    alt="Edit"
+                                                    className="w-full h-full"
+                                                />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(expense._id)}
+                                                className="w-6 h-6 cursor-pointer hover:scale-105 transition-transform bg-transparent p-1 rounded-md"
+                                            >
+                                                <img
+                                                    src="https://cdn-icons-png.flaticon.com/128/6861/6861362.png"
+                                                    alt="Delete"
+                                                    className="w-full h-full"
+                                                />
+                                            </button>
+                                        </div>
+                                    </td>
                                     <td className="py-3 px-4">{expense.amount}</td>
                                     <td className="py-3 px-4">{expense.report}</td>
                                     <td className="py-3 px-4">
