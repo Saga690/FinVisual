@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://finvisual.onrender.com/api/transactions"; 
+const API_URL = "https://finvisual-1.onrender.com/api/transactions"; 
 
 export const getTransactions = async () => {
   const res = await axios.get(API_URL);
