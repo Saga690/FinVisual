@@ -3,13 +3,12 @@ import { useState } from "react";
 import styles from "@/styles/Home.module.css";
 import Main from "@/components/Main";
 import Expenses from "@/components/expenses";
-import Trips from "@/components/Trips"; 
-import Approvals from "@/components/Approvals"; 
+import Trips from "@/components/Trips";
+import Approvals from "@/components/Approvals";
 import Settings from "@/components/Settings";
-import Support from "@/components/Support"; 
+import Support from "@/components/Support";
 
 export default function Home() {
-
   const [selectedPage, setSelectedPage] = useState("home");
 
   const handleNavigation = (page) => {
@@ -28,26 +27,74 @@ export default function Home() {
         <aside className="w-64 bg-black p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <img src="https://png.pngtree.com/png-vector/20190710/ourlarge/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="User" className="w-12 h-12 rounded-full" />
+              <img
+                src="https://png.pngtree.com/png-vector/20190710/ourlarge/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                alt="User"
+                className="w-12 h-12 rounded-full"
+              />
               <span className="text-lg font-semibold">Ayush Dangwal</span>
             </div>
             <nav className="space-y-3">
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "home" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("home")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "home" ? "bg-gray-800" : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("home")}
+              >
                 🏠 Home
               </a>
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "expenses" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("expenses")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "expenses"
+                    ? "bg-gray-800"
+                    : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("expenses")}
+              >
                 💰 Expenses
               </a>
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "trips" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("trips")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "trips" ? "bg-gray-800" : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("trips")}
+              >
                 ✈️ Trips
               </a>
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "approvals" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("approvals")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "approvals"
+                    ? "bg-gray-800"
+                    : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("approvals")}
+              >
                 ✅ Approvals
               </a>
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "settings" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("settings")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "settings"
+                    ? "bg-gray-800"
+                    : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("settings")}
+              >
                 ⚙️ Settings
               </a>
-              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "support" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("support")}>
+              <a
+                href="#"
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  selectedPage === "support"
+                    ? "bg-gray-800"
+                    : "hover:bg-gray-800"
+                }`}
+                onClick={() => handleNavigation("support")}
+              >
                 📞 Support
               </a>
             </nav>
@@ -55,12 +102,15 @@ export default function Home() {
           <div>
             <div className="flex items-center justify-center space-x-4">
               <img src="favicon.png" alt="" className="w-8 h-8" />
-              <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xl font-bold">FinVisual</div>
+              <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-xl font-bold">
+                FinVisual
+              </div>
             </div>
           </div>
         </aside>
 
-        <div className="flex-1 p-5">
+        <div className="flex-1 p-5 overflow-y-auto">
+          {/* This will allow the content area to scroll if the content overflows */}
           {selectedPage === "home" && <Main />}
           {selectedPage === "expenses" && <Expenses />}
           {selectedPage === "trips" && <Trips />}

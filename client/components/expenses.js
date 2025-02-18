@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addTransaction, getTransactions, deleteTransaction } from "@/lib/api";
+import { addTransaction, getTransactions, deleteTransaction, editTransaction } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -13,6 +13,7 @@ export default function Expenses() {
     const [amount, setAmount] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
+    const [editingExpense, setEditingExpense] = useState(null); 
 
     useEffect(() => {
         fetchExpenses();
@@ -21,7 +22,6 @@ export default function Expenses() {
     const fetchExpenses = async () => {
         try {
             const transactions = await getTransactions();
-
             const formattedData = transactions.map((tx) => {
                 const amount = tx.amount;
                 let status = "Low";
@@ -54,12 +54,16 @@ export default function Expenses() {
     };
 
     const handleEdit = (id) => {
-        console.log("Editing expense with ID:", id);
+        const expenseToEdit = expensesData.find((expense) => expense._id === id);
+        setEditingExpense(expenseToEdit);
+        setAmount(expenseToEdit.amount.replace("$", "")); 
+        setCategory(expenseToEdit.report); 
+        setDescription(expenseToEdit.title);
+        setIsModalOpen(true);
     };
 
     const handleDelete = async (id) => {
         try {
-            console.log(id);
             await deleteTransaction(id);
             fetchExpenses();
             alert("Expense deleted successfully!");
@@ -68,7 +72,6 @@ export default function Expenses() {
             alert("Failed to delete the expense.");
         }
     };
-
 
     const handleSaveExpense = async () => {
         if (!amount || !category || !description) {
@@ -84,11 +87,20 @@ export default function Expenses() {
         };
 
         try {
-            await addTransaction(newExpense);
+            if (editingExpense) {
+                await editTransaction(editingExpense._id, newExpense); 
+                alert("Expense updated successfully!");
+            } else {
+                await addTransaction(newExpense); 
+                alert("Expense added successfully!");
+            }
             setIsModalOpen(false);
-            fetchExpenses();
+            fetchExpenses(); 
         } catch (error) {
-            console.error("Error adding transaction:", error);
+            console.error("Error saving transaction:", error);
+            alert("Failed to save the expense.");
+        } finally {
+            setEditingExpense(null);
         }
     };
 
@@ -108,11 +120,11 @@ export default function Expenses() {
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="bg-gray-900 text-white">
                     <DialogHeader>
-                        <DialogTitle>Add New Expense</DialogTitle>
+                        <DialogTitle>{editingExpense ? "Edit Expense" : "Add New Expense"}</DialogTitle>
                     </DialogHeader>
                     <Card className="bg-gray-800 text-white">
                         <CardHeader>
-                            <h2 className="text-lg font-semibold">Expense Details</h2>
+                            <h2 className="text-lg font-semibold">{editingExpense ? "Edit Expense Details" : "Expense Details"}</h2>
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
@@ -151,7 +163,7 @@ export default function Expenses() {
                                     Cancel
                                 </Button>
                                 <Button onClick={handleSaveExpense} className="bg-green-500 hover:bg-green-600">
-                                    Save Expense
+                                    {editingExpense ? "Save Changes" : "Save Expense"}
                                 </Button>
                             </div>
                         </CardContent>
