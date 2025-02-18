@@ -9,7 +9,7 @@ const Main = () => {
         async function fetchTransactions() {
             try {
                 const data = await getTransactions();
-                setTransactions(data.slice(0, 5)); // Get only the last 5 transactions
+                setTransactions(data.slice(0, 5));
             } catch (error) {
                 console.error("Error fetching transactions:", error);
             }
@@ -53,7 +53,7 @@ const Main = () => {
                             {transactions.map((transaction, index) => (
                                 <tr key={index} className="border-b border-gray-700">
                                     <td className="p-2">{transaction.description}</td>
-                                    <td className="p-2">€{transaction.amount.toFixed(2)}</td>
+                                    <td className="p-2">${transaction.amount.toFixed(2)}</td>
                                     <td className="p-2">
                                         <span className="bg-purple-600 px-2 py-1 rounded">
                                             {transaction.category || "None"}
@@ -69,8 +69,8 @@ const Main = () => {
 
             <div className="mt-6 bg-gray-800 p-6 rounded-lg">
                 <h2 className="text-lg font-semibold mb-4">Monthly Report</h2>
-                <div className="flex gap-4">
-                    <div className="bg-gray-900 p-6 rounded-lg"><BarChart /></div>
+                <div className="flex gap-4 w-full"> 
+                    <div className="bg-gray-900 p-6 rounded-lg w-full"><BarChart /></div>
                 </div>
             </div>
         </div>

@@ -1,58 +1,146 @@
 import { useEffect, useState } from "react";
-import { getTransactions } from "@/lib/api";
+import { addTransaction, getTransactions } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Expenses() {
     const [expensesData, setExpensesData] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [amount, setAmount] = useState("");
+    const [category, setCategory] = useState("");
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
-        const fetchExpenses = async () => {
-            try {
-                const transactions = await getTransactions();
-
-                const formattedData = transactions.map((tx) => {
-                    const amount = tx.amount;
-                    let status = "Low";
-                    let statusColor = "bg-green-600"; // Default to Green (Low)
-
-                    if (amount > 1500) {
-                        status = "High";
-                        statusColor = "bg-red-600"; // High = Red
-                    } else if (amount > 750) {
-                        status = "Medium";
-                        statusColor = "bg-orange-500"; // Medium = Orange
-                    }
-
-                    return {
-                        date: new Date(tx.date).toLocaleDateString(),
-                        title: tx.description,
-                        merchant: "Unknown",
-                        amount: `$${amount.toFixed(2)}`,
-                        report: "Category",
-                        status,
-                        statusColor,
-                    };
-                });
-
-                setExpensesData(formattedData);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        };
-
         fetchExpenses();
     }, []);
+
+    const fetchExpenses = async () => {
+        try {
+            const transactions = await getTransactions();
+
+            const formattedData = transactions.map((tx) => {
+                const amount = tx.amount;
+                let status = "Low";
+                let statusColor = "bg-green-600";
+
+                if (amount > 1500) {
+                    status = "High";
+                    statusColor = "bg-red-600";
+                } else if (amount > 750) {
+                    status = "Medium";
+                    statusColor = "bg-orange-500";
+                }
+
+                return {
+                    date: new Date(tx.date).toLocaleDateString(),
+                    title: tx.description,
+                    merchant: "Unknown",
+                    amount: `$${amount.toFixed(2)}`,
+                    report: "Category",
+                    status,
+                    statusColor,
+                };
+            });
+
+            setExpensesData(formattedData);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
+
+
+    const handleSaveExpense = async () => {
+        if (!amount || !category || !description) {
+            alert("Please fill in all fields!");
+            return;
+        }
+
+        const newExpense = {
+            amount: parseFloat(amount),
+            category,
+            description,
+            date: new Date().toISOString(),
+        };
+
+        try {
+            await addTransaction(newExpense);
+            setIsModalOpen(false);
+            fetchExpenses();
+        } catch (error) {
+            console.error("Error adding transaction:", error);
+        }
+    };
 
     return (
         <div className="p-6 text-white">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">Expenses</h1>
                 <div className="flex space-x-2">
-                    <Button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">+ New Expense</Button>
+                    <Button onClick={() => setIsModalOpen(true)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
+                        + New Expense
+                    </Button>
                     <Button className="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-md">🔍</Button>
                     <Button className="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-md">⋮</Button>
                 </div>
             </div>
+
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="bg-gray-900 text-white">
+                    <DialogHeader>
+                        <DialogTitle>Add New Expense</DialogTitle>
+                    </DialogHeader>
+                    <Card className="bg-gray-800 text-white">
+                        <CardHeader>
+                            <h2 className="text-lg font-semibold">Expense Details</h2>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label className="text-gray-400">Amount</Label>
+                                    <Input
+                                        type="number"
+                                        placeholder="Enter amount"
+                                        className="bg-gray-700 text-white"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-gray-400">Category</Label>
+                                    <Input
+                                        type="text"
+                                        placeholder="Enter category"
+                                        className="bg-gray-700 text-white"
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-gray-400">Description</Label>
+                                    <Textarea
+                                        placeholder="Enter description"
+                                        className="bg-gray-700 text-white"
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-4 flex justify-end space-x-2">
+                                <Button onClick={() => setIsModalOpen(false)} className="bg-gray-600 hover:bg-gray-500">
+                                    Cancel
+                                </Button>
+                                <Button onClick={handleSaveExpense} className="bg-green-500 hover:bg-green-600">
+                                    Save Expense
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </DialogContent>
+            </Dialog>
 
             <div className="bg-black rounded-lg p-4 shadow-md">
                 <table className="w-full text-left border-collapse">
