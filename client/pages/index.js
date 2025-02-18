@@ -1,9 +1,21 @@
 import Head from "next/head";
-import Image from "next/image";
+import { useState } from "react";
 import styles from "@/styles/Home.module.css";
-import BarChart from "../components/BarChart";
+import Main from "@/components/Main";
+import Expenses from "@/components/expenses";
+import Trips from "@/components/Trips"; 
+import Approvals from "@/components/Approvals"; 
+import Settings from "@/components/Settings";
+import Support from "@/components/Support"; 
 
 export default function Home() {
+
+  const [selectedPage, setSelectedPage] = useState("home");
+
+  const handleNavigation = (page) => {
+    setSelectedPage(page);
+  };
+
   return (
     <>
       <Head>
@@ -20,22 +32,22 @@ export default function Home() {
               <span className="text-lg font-semibold">Ayush Dangwal</span>
             </div>
             <nav className="space-y-3">
-              <a href="#" className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "home" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("home")}>
                 🏠 Home
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "expenses" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("expenses")}>
                 💰 Expenses
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "trips" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("trips")}>
                 ✈️ Trips
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "approvals" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("approvals")}>
                 ✅ Approvals
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "settings" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("settings")}>
                 ⚙️ Settings
               </a>
-              <a href="#" className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg">
+              <a href="#" className={`flex items-center gap-3 p-3 rounded-lg ${selectedPage === "support" ? "bg-gray-800" : "hover:bg-gray-800"}`} onClick={() => handleNavigation("support")}>
                 📞 Support
               </a>
             </nav>
@@ -48,56 +60,14 @@ export default function Home() {
           </div>
         </aside>
 
-        <main className="flex-1 p-6">
-          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
-          <div className="grid grid-cols-3 gap-6">
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Pending Tasks</h2>
-              <ul className="space-y-1">
-                <li className="flex justify-between">
-                  <span>Pending Approvals</span> <span>5</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>New Trips Registered</span> <span>1</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Unreported Expenses</span> <span>4</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-gray-800 p-4 rounded-lg col-span-2">
-              <h2 className="text-lg font-semibold mb-2">Recent Expenses</h2>
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="p-2">Subject</th>
-                    <th className="p-2">Employee</th>
-                    <th className="p-2">Team</th>
-                    <th className="p-2">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-2">Office Supplies</td>
-                    <td className="p-2">John Smith</td>
-                    <td className="p-2"><span className="bg-purple-600 px-2 py-1 rounded">Marketing</span></td>
-                    <td className="p-2">€150.00</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="mt-6 bg-gray-800 p-6 rounded-lg">
-            <h2 className="text-lg font-semibold mb-4">Monthly Report</h2>
-            <div className="flex gap-4">
-              <div className="flex-1 bg-gray-900 p-4 rounded-lg"><BarChart /></div>
-              <div className="flex-1 bg-gray-900 p-4 rounded-lg"><BarChart /></div>
-            </div>
-          </div>
-        </main>
+        <div className="flex-1 p-5">
+          {selectedPage === "home" && <Main />}
+          {selectedPage === "expenses" && <Expenses />}
+          {selectedPage === "trips" && <Trips />}
+          {selectedPage === "approvals" && <Approvals />}
+          {selectedPage === "settings" && <Settings />}
+          {selectedPage === "support" && <Support />}
+        </div>
       </div>
     </>
   );
